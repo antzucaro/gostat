@@ -4,50 +4,56 @@
   <link type="text/css" href="/css/foundation.min.css" rel="stylesheet"></link>
 </head>
 <body>
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Nick</th>
-            <th>Elo</th>
-        </tr>
-        {{ range .DuelRanks }}
-        <tr>
-            <td>{{ .Rank }}</td>
-            <td>{{ .Nick }}</td>
-            <td>{{ printf "%.0f" .Elo }}</td>
-        </tr>
-        {{ end }}
-    </table>
+    <div class="small-12 large-4 columns">
+      <table>
+          <tr>
+              <th>#</th>
+              <th>Nick</th>
+              <th>Elo</th>
+          </tr>
+          {{ range .DuelRanks }}
+          <tr>
+              <td>{{ .Rank }}</td>
+              <td>{{ .Nick }}</td>
+              <td>{{ printf "%.0f" .Elo }}</td>
+          </tr>
+          {{ end }}
+      </table>
+    </div>
 
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Nick</th>
-            <th>Elo</th>
-        </tr>
-        {{ range .CTFRanks }}
-        <tr>
-            <td>{{ .Rank }}</td>
-            <td>{{ .Nick }}</td>
-            <td>{{ printf "%.0f" .Elo }}</td>
-        </tr>
-        {{ end }}
-    </table>
+    <div class="small-12 large-4 columns">
+      <table>
+          <tr>
+              <th>#</th>
+              <th>Nick</th>
+              <th>Elo</th>
+          </tr>
+          {{ range .CTFRanks }}
+          <tr>
+              <td>{{ .Rank }}</td>
+              <td>{{ .Nick }}</td>
+              <td>{{ printf "%.0f" .Elo }}</td>
+          </tr>
+          {{ end }}
+      </table>
+    </div>
 
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Nick</th>
-            <th>Elo</th>
-        </tr>
-        {{ range .DMRanks }}
-        <tr>
-            <td>{{ .Rank }}</td>
-            <td>{{ .Nick }}</td>
-            <td>{{ printf "%.0f" .Elo }}</td>
-        </tr>
-        {{ end }}
-    </table>
+    <div class="small-12 large-4 columns">
+      <table>
+          <tr>
+              <th>#</th>
+              <th>Nick</th>
+              <th>Elo</th>
+          </tr>
+          {{ range .DMRanks }}
+          <tr>
+              <td>{{ .Rank }}</td>
+              <td>{{ .Nick }}</td>
+              <td>{{ printf "%.0f" .Elo }}</td>
+          </tr>
+          {{ end }}
+      </table>
+    </div>
 
 </body>
 </html>
