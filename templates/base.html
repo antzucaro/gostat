@@ -1,0 +1,53 @@
+<html>
+<head>
+  <title>GoStat - XonStat's Main Page, Written in Go</title>
+  <link type="text/css" href="/css/foundation.min.css" rel="stylesheet"></link>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Nick</th>
+            <th>Elo</th>
+        </tr>
+        {{ range .DuelRanks }}
+        <tr>
+            <td>{{ .Rank }}</td>
+            <td>{{ .Nick }}</td>
+            <td>{{ printf "%.0f" .Elo }}</td>
+        </tr>
+        {{ end }}
+    </table>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Nick</th>
+            <th>Elo</th>
+        </tr>
+        {{ range .CTFRanks }}
+        <tr>
+            <td>{{ .Rank }}</td>
+            <td>{{ .Nick }}</td>
+            <td>{{ printf "%.0f" .Elo }}</td>
+        </tr>
+        {{ end }}
+    </table>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Nick</th>
+            <th>Elo</th>
+        </tr>
+        {{ range .DMRanks }}
+        <tr>
+            <td>{{ .Rank }}</td>
+            <td>{{ .Nick }}</td>
+            <td>{{ printf "%.0f" .Elo }}</td>
+        </tr>
+        {{ end }}
+    </table>
+
+</body>
+</html>

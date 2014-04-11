@@ -3,8 +3,9 @@ package main
 import (
     _ "github.com/lib/pq"
     "database/sql"
-    "fmt"
     "github.com/go-martini/martini"
+    "html/template"
+    "net/http"
 )
 
 // Player ranks
@@ -19,7 +20,7 @@ type PlayerRank struct {
 const topNRanksSQL = "SELECT player_id, nick, game_type_cd, elo, rank FROM player_ranks WHERE game_type_cd = $1 AND rank <= $2"
 var topNRanksStmt *sql.Stmt
 
-func GetTopNRanks(db *sql.DB, gameType string, limit int) []PlayerRank {
+func GetTopNRanks(gameType string, limit int) []PlayerRank {
     rows, err := topNRanksStmt.Query(gameType, limit)
     if err != nil {
         panic(err)
@@ -38,8 +39,6 @@ func GetTopNRanks(db *sql.DB, gameType string, limit int) []PlayerRank {
         }
 
         r := PlayerRank{id, nick, gameType, elo, rank}
-        fmt.Println(r)
-        fmt.Printf("%.0f\n", r.Elo)
         ranks = append(ranks, r)
     }
     err = rows.Err()
@@ -65,11 +64,24 @@ func main() {
   // all connections will have a db connection available
   m.Map(db)
 
-  m.Get("/", func(db *sql.DB) string {
-      GetTopNRanks(db, "duel", 10)
-      GetTopNRanks(db, "ctf", 10)
-      GetTopNRanks(db, "dm", 10)
-      return "Hello, world!"
+  // templates
+  main, err := template.ParseFiles("templates/base.html")
+  if err != nil {
+    panic(err)
+  }
+
+  m.Get("/", func(w http.ResponseWriter, r *http.Request) {
+      type data struct {
+          DuelRanks []PlayerRank
+          CTFRanks []PlayerRank
+          DMRanks []PlayerRank
+      }
+      var d data
+
+      d.DuelRanks = GetTopNRanks("duel", 10)
+      d.CTFRanks = GetTopNRanks("ctf", 10)
+      d.DMRanks = GetTopNRanks("dm", 10)
+      main.Execute(w, d)
   })
 
   m.Run()
