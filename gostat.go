@@ -1,7 +1,7 @@
 package main
 
 import (
-    "github.com/antzucaro/gostat/db"
+    "github.com/antzucaro/gostat/models"
     "github.com/go-martini/martini"
     "html/template"
     "net/http"
@@ -11,7 +11,7 @@ func main() {
   m := martini.Classic()
 
   // establish database connection, prepare queries
-  db.Init("user=xonstat host=localhost dbname=xonstatdb sslmode=disable")
+  models.Init("user=xonstat host=localhost dbname=xonstatdb sslmode=disable")
 
   // templates
   main, err := template.ParseFiles("templates/base.html")
@@ -21,15 +21,15 @@ func main() {
 
   m.Get("/", func(w http.ResponseWriter, r *http.Request) {
       type data struct {
-          DuelRanks []db.PlayerRank
-          CTFRanks []db.PlayerRank
-          DMRanks []db.PlayerRank
+          DuelRanks []models.PlayerRank
+          CTFRanks []models.PlayerRank
+          DMRanks []models.PlayerRank
       }
       var d data
 
-      d.DuelRanks = db.GetTopNRanks("duel", 10)
-      d.CTFRanks = db.GetTopNRanks("ctf", 10)
-      d.DMRanks = db.GetTopNRanks("dm", 10)
+      d.DuelRanks = models.GetTopNRanks("duel", 10)
+      d.CTFRanks = models.GetTopNRanks("ctf", 10)
+      d.DMRanks = models.GetTopNRanks("dm", 10)
       main.Execute(w, d)
   })
 
