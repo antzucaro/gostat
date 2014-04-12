@@ -3,6 +3,7 @@ package main
 import (
     _ "github.com/lib/pq"
     "database/sql"
+    "github.com/antzucaro/gostat/qstr"
     "github.com/go-martini/martini"
     "html/template"
     "net/http"
@@ -11,7 +12,7 @@ import (
 // Player ranks
 type PlayerRank struct {
     Id   int
-    Nick string
+    Nick qstr.QStr
     GameType string
     Elo  float64
     Rank int
@@ -38,7 +39,7 @@ func GetTopNRanks(gameType string, limit int) []PlayerRank {
             panic(err)
         }
 
-        r := PlayerRank{id, nick, gameType, elo, rank}
+        r := PlayerRank{id, qstr.QStr(nick), gameType, elo, rank}
         ranks = append(ranks, r)
     }
     err = rows.Err()
