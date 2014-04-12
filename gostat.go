@@ -1,9 +1,10 @@
 package main
 
 import (
+    "github.com/antzucaro/gostat/controllers"
     "github.com/antzucaro/gostat/models"
+    "github.com/antzucaro/gostat/templates"
     "github.com/go-martini/martini"
-    "html/template"
     "net/http"
 )
 
@@ -14,23 +15,10 @@ func main() {
   models.Init("user=xonstat host=localhost dbname=xonstatdb sslmode=disable")
 
   // templates
-  main, err := template.ParseFiles("templates/base.html")
-  if err != nil {
-    panic(err)
-  }
+  templates.Init()
 
   m.Get("/", func(w http.ResponseWriter, r *http.Request) {
-      type data struct {
-          DuelRanks []models.PlayerRank
-          CTFRanks []models.PlayerRank
-          DMRanks []models.PlayerRank
-      }
-      var d data
-
-      d.DuelRanks = models.GetTopNRanks("duel", 10)
-      d.CTFRanks = models.GetTopNRanks("ctf", 10)
-      d.DMRanks = models.GetTopNRanks("dm", 10)
-      main.Execute(w, d)
+      controllers.MainController(w, r)
   })
 
   m.Run()
