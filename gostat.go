@@ -5,7 +5,6 @@ import (
     "github.com/antzucaro/gostat/models"
     "github.com/antzucaro/gostat/templates"
     "github.com/go-martini/martini"
-    "net/http"
 )
 
 func main() {
@@ -17,9 +16,8 @@ func main() {
   // templates
   templates.Init()
 
-  m.Get("/", func(w http.ResponseWriter, r *http.Request) {
-      controllers.Leaderboard(w, r)
-  })
+  // routes
+  m.Get("/", controllers.Leaderboard)
 
   m.Run()
 }
