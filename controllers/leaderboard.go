@@ -6,7 +6,7 @@ import (
     "net/http"
 )
 
-func MainController(w http.ResponseWriter, r *http.Request) {
+func Leaderboard(w http.ResponseWriter, r *http.Request) {
     type data struct {
         DuelRanks []models.PlayerRank
         CTFRanks []models.PlayerRank
@@ -17,5 +17,5 @@ func MainController(w http.ResponseWriter, r *http.Request) {
     d.DuelRanks = models.GetTopNRanks("duel", 10)
     d.CTFRanks = models.GetTopNRanks("ctf", 10)
     d.DMRanks = models.GetTopNRanks("dm", 10)
-    templates.Render("main", w, d)
+    templates.Render("leaderboard", w, d)
 }

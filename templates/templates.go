@@ -18,7 +18,7 @@ func initTemplate(name string, filenames ...string) {
 }
 
 func Init() {
-  initTemplate("main", "templates/base.html")
+  initTemplate("leaderboard", "templates/base.html")
 }
 
 func Render(name string, w http.ResponseWriter, c interface{}) {

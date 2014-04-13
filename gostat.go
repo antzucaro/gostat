@@ -18,7 +18,7 @@ func main() {
   templates.Init()
 
   m.Get("/", func(w http.ResponseWriter, r *http.Request) {
-      controllers.MainController(w, r)
+      controllers.Leaderboard(w, r)
   })
 
   m.Run()
