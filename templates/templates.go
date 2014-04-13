@@ -8,13 +8,17 @@ import (
 
 var templates = map[string]*template.Template{}
 
-func Init() {
-  t, err := template.ParseFiles("templates/base.html")
-  if err != nil {
-      log.Fatal(err)
-  }
+func initTemplate(name string, filenames ...string) {
+    t, err := template.ParseFiles(filenames...)
+    if err != nil {
+        log.Fatal("Error retrieving or compiling the " + name + " template.")
+    }
 
-  templates["main"] = t
+    templates[name] = t
+}
+
+func Init() {
+  initTemplate("main", "templates/base.html")
 }
 
 func Render(name string, w http.ResponseWriter, c interface{}) {
