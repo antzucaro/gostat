@@ -15,23 +15,14 @@ import (
 type DailyStat struct {
     Players int
     Games int
-    Type1 string
-    Type1Games int
-    Type2 string
-    Type2Games int
-    Type3 string
-    Type3Games int
-    Type4 string
-    Type4Games int
-    Type5 string
-    Type5Games int
+    GameCounts []GameCount
     OtherGames int
 }
 
 const dailyActivePlayersSQL = `SELECT count(distinct player_id) 
 FROM player_game_stats 
 WHERE player_id > 1
-AND create_dt >= now() at time zone 'utc' - interval '1 day'`
+AND create_dt >= now() at time zone 'utc' - interval '20 days'`
 
 var dailyActivePlayersStmt *sql.Stmt
 
@@ -59,7 +50,7 @@ type GameCount struct {
 
 const dailyGamesSQL = `SELECT game_type_cd, count(*) 
 FROM games 
-WHERE create_dt >= now() at time zone 'utc' - interval '1 day'
+WHERE create_dt >= now() at time zone 'utc' - interval '20 days'
 GROUP BY game_type_cd
 ORDER BY count(*) desc`
 
@@ -89,4 +80,41 @@ func GetDailyGameCounts() []GameCount {
     }
 
     return gameCounts
+}
+
+// GetDailyStatLine gets high-level statistics from the past 24 hours. 
+// In particular it retrieves the number of active players and games played,
+// but it also provides a breakdown of the top five most played game modes
+// and their respective game counts. Game modes not in the top five are 
+// placed into an "other" category along with a count.
+func GetDailyStatLine() DailyStat {
+    ds := DailyStat{}
+
+    // active players
+    ds.Players = GetDailyActivePlayers()
+
+    // note: this contains *all* game types, so we will have to check if it
+    // needs to be pruned/condensed
+    gcs := GetDailyGameCounts()
+
+    games := 0
+    otherGames := 0
+    for i, gc := range gcs {
+        games += gc.Games
+
+        // condense other game types into an "other" category
+        if i > 5 {
+            otherGames += gc.Games
+        }
+    }
+    ds.Games = games
+    ds.OtherGames = otherGames
+
+    if len(gcs) > 5 {
+        ds.GameCounts = gcs[:5]
+    } else {
+        ds.GameCounts = gcs
+    }
+
+    return ds
 }
