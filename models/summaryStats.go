@@ -11,7 +11,7 @@ import (
 // - Number of games played
 // - A breakdown of the number of games played by the top five game types  The
 //   other game types played but not in the top five are grouped into "other".
-type SummaryStat struct {
+type SummaryStats struct {
     Players int
     Games int
     GameCounts []GameCount
@@ -88,7 +88,7 @@ func GetGameCounts(recent bool) []GameCount {
         rows, err = recentGameCountStmt.Query()
     } else {
         // fetch the total count of games
-        rows, err = recentGameCountStmt.Query()
+        rows, err = overallGameCountStmt.Query()
     }
 
     if err != nil {
@@ -117,8 +117,8 @@ func GetGameCounts(recent bool) []GameCount {
 // players and games played, but it also provides a breakdown of the top five
 // most played game modes and their respective game counts. Game modes not in
 // the top five are placed into an "other" category along with a count.
-func GetSummaryStats(recent bool) SummaryStat {
-    ds := SummaryStat{}
+func GetSummaryStats(recent bool) SummaryStats {
+    ds := SummaryStats{}
 
     // active players
     ds.Players = GetActivePlayers(recent)

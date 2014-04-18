@@ -1,17 +1,17 @@
 package controllers
 
 import (
+    "fmt"
     "github.com/antzucaro/gostat/models"
     "github.com/antzucaro/gostat/templates"
     "html/template"
     "net/http"
-
-    "fmt"
 )
 
 func Leaderboard(w http.ResponseWriter, r *http.Request) {
     type data struct {
-        DailyStatLine template.HTML
+        OverallStatLine template.HTML
+        RecentStatLine template.HTML
         DuelRanks []models.PlayerRank
         CTFRanks []models.PlayerRank
         DMRanks []models.PlayerRank
@@ -22,25 +22,39 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
     d.CTFRanks = models.GetTopNRanks("ctf", 10)
     d.DMRanks = models.GetTopNRanks("dm", 10)
 
-    dsl := models.GetSummaryStats(true)
+    oss := models.GetSummaryStats(false)
+    osl := makeStatLine("Tracking ", oss, " since October 2011.")
+    d.OverallStatLine = osl
 
-    dailyStatLine := fmt.Sprintf("%d active players and %d games (", 
-        dsl.Players, dsl.Games)
-
-    // common case is we have > 5 game modes to show
-    if dsl.OtherGames > 0 {
-        for _, gc := range dsl.GameCounts {
-            dailyStatLine += fmt.Sprintf("%d %s, ", gc.Games, gc.GameType)
-        }
-        dailyStatLine += fmt.Sprintf("%d other", dsl.OtherGames)
-    // less common is we append all that we have and don't show an "other"
-    } else {
-        // we have to construct the daily stat line from what we have thus far
-        dailyStatLine += "TBD)"
-    }
-    dailyStatLine += fmt.Sprintf(") in the past 24 hours.")
-
-    d.DailyStatLine = template.HTML(dailyStatLine)
+    rss := models.GetSummaryStats(true)
+    rsl := makeStatLine("", rss, " in the past 24 hours.")
+    d.RecentStatLine = rsl
 
     templates.Render("leaderboard", w, d)
+}
+
+func makeStatLine(prefix string, stats models.SummaryStats, suffix string) template.HTML {
+    line := fmt.Sprintf("%s%d players and %d games (", 
+        prefix, stats.Players, stats.Games)
+
+    // common case is we have > 5 game modes to show
+    if stats.OtherGames > 0 {
+        for _, gc := range stats.GameCounts {
+            line += fmt.Sprintf("%d %s, ", gc.Games, gc.GameType)
+        }
+        line += fmt.Sprintf(" and %d other)", stats.OtherGames)
+    // less common is we append all that we have and don't show an "other"
+    } else {
+        end := len(stats.GameCounts) - 1
+        for i, gc := range stats.GameCounts {
+            line += fmt.Sprintf("%d %s", gc.Games, gc.GameType)
+            if i < end {
+                line += ", "
+            }
+        }
+        line += ")"
+    }
+    line += suffix
+
+    return template.HTML(line)
 }
