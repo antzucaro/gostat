@@ -34,6 +34,11 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func makeStatLine(prefix string, stats models.SummaryStats, suffix string) template.HTML {
+    // first check if there is anything to build
+    if stats.Games == 0 {
+        return ""
+    }
+
     line := fmt.Sprintf("%s%d players and %d games (", 
         prefix, stats.Players, stats.Games)
 

@@ -5,13 +5,17 @@
   <script src="/js/foundation.min.js"></script>
 </head>
 <body>
+    {{ if .OverallStatLine }}
     <div class="small-12 columns">
         {{ .OverallStatLine }}
     </div>
+    {{ end }}
 
+    {{ if .RecentStatLine }}
     <div class="small-12 columns">
         {{ .RecentStatLine }}
     </div>
+    {{ end }}
 
     <div class="small-12 large-4 columns">
       <table>
