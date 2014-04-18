@@ -6,8 +6,10 @@ import (
     "log"
 )
 
+// the main connection used all throughout the app
 var db *sql.DB
 
+// Init opens a connection to the database and prepares all of the queries
 func Init(connString string) (err error) {
   // establish a database connection
   db, err = sql.Open("postgres", connString)
@@ -16,10 +18,23 @@ func Init(connString string) (err error) {
   }
 
   // prepare all of the queries
-  topNRanksStmt, err = db.Prepare(topNRanksSQL)
-  recentActivePlayersStmt, err = db.Prepare(recentActivePlayersSQL)
-  overallActivePlayersStmt, err = db.Prepare(overallActivePlayersSQL)
-  recentGameCountStmt, err = db.Prepare(recentGameCountSQL)
-  overallGameCountStmt, err = db.Prepare(overallGameCountSQL)
+  topNRanksStmt = initStatement("topNRanksStmt", topNRanksSQL)
+  recentActivePlayersStmt = initStatement("recentActivePlayersStmt", recentActivePlayersSQL)
+  overallActivePlayersStmt = initStatement("overallActivePlayersStmt", overallActivePlayersSQL)
+  recentGameCountStmt = initStatement("recentGameCountStmt", recentGameCountSQL)
+  overallGameCountStmt = initStatement("overallGameCountStmt", overallGameCountSQL)
+
   return
+}
+
+// initializes a prepared statement by name for better logging/traceability
+func initStatement(name string, sql string) *sql.Stmt {
+  stmt, err := db.Prepare(sql)
+  if err != nil {
+      log.Fatal("Error preparing SQL statement " + name)
+  } else {
+      log.Println("Prepared statement " + name)
+  }
+
+  return stmt
 }
