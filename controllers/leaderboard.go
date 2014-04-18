@@ -22,7 +22,7 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
     d.CTFRanks = models.GetTopNRanks("ctf", 10)
     d.DMRanks = models.GetTopNRanks("dm", 10)
 
-    dsl := models.GetDailyStatLine()
+    dsl := models.GetSummaryStats(true)
 
     dailyStatLine := fmt.Sprintf("%d active players and %d games (", 
         dsl.Players, dsl.Games)

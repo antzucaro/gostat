@@ -5,40 +5,54 @@ import (
     "log"
 )
 
-// The daily stat line is the summary line at the top of the page which shows
-// the following info for the past 24 hours:
+// SummaryStats represents summary information for a period of time:
 //
 // - Number of active players
 // - Number of games played
 // - A breakdown of the number of games played by the top five game types  The
 //   other game types played but not in the top five are grouped into "other".
-type DailyStat struct {
+type SummaryStat struct {
     Players int
     Games int
     GameCounts []GameCount
     OtherGames int
 }
 
-const dailyActivePlayersSQL = `SELECT count(distinct player_id) 
+// how many days is "recent"?
+const days = "1"
+
+const recentActivePlayersSQL = `SELECT count(distinct player_id) 
 FROM player_game_stats 
 WHERE player_id > 1
-AND create_dt >= now() at time zone 'utc' - interval '20 days'`
+AND create_dt >= now() at time zone 'utc' - interval '` + days + " days'"
 
-var dailyActivePlayersStmt *sql.Stmt
+var recentActivePlayersStmt *sql.Stmt
 
-// Retrieves the number of active players for the past 24 hours. Bots are 
-// excluded, but // one anonymous player is included - we cannot count the 
-// distinct number of those types of players (they are all player_id 2).
-func GetDailyActivePlayers() int {
-    row := dailyActivePlayersStmt.QueryRow()
+const overallActivePlayersSQL = `SELECT count(distinct player_id) 
+FROM players 
+WHERE player_id >= 2 and active_ind = 'Y'`
 
-    var dailyActivePlayers int
-    err := row.Scan(&dailyActivePlayers)
+var overallActivePlayersStmt *sql.Stmt
+
+// Retrieves the number of active players, with a flag "recent" to pull 
+// all or just the most recent. Bots are excluded, but one anonymous player 
+// is included - we cannot count the distinct number of those types of 
+// players (they are all player_id 2).
+func GetActivePlayers(recent bool) int {
+    var row *sql.Row
+    if recent {
+        row = recentActivePlayersStmt.QueryRow()
+    } else {
+        row = overallActivePlayersStmt.QueryRow()
+    }
+
+    var players int
+    err := row.Scan(&players)
     if err != nil {
         log.Fatal(err)
     }
 
-    return dailyActivePlayers
+    return players
 }
 
 // GameCount is a struct to hold the various game types and the
@@ -48,19 +62,35 @@ type GameCount struct {
     Games int
 }
 
-const dailyGamesSQL = `SELECT game_type_cd, count(*) 
+const overallGameCountSQL = `SELECT game_type_cd, count(*) 
 FROM games 
-WHERE create_dt >= now() at time zone 'utc' - interval '20 days'
 GROUP BY game_type_cd
 ORDER BY count(*) desc`
 
-var dailyGamesStmt *sql.Stmt
+var overallGameCountStmt *sql.Stmt
+
+const recentGameCountSQL = `SELECT game_type_cd, count(*) 
+FROM games 
+WHERE create_dt >= now() at time zone 'utc' - interval '` + days + " days' " + 
+`GROUP BY game_type_cd
+ORDER BY count(*) desc`
+
+var recentGameCountStmt *sql.Stmt
 
 // Retrieve the games played in the past 24 hours by game type.
 // Returns an array of GameCount structs ordered from the most
 // played game type to the least. No aggregations are performed.
-func GetDailyGameCounts() []GameCount {
-    rows, err := dailyGamesStmt.Query()
+func GetGameCounts(recent bool) []GameCount {
+    var rows *sql.Rows
+    var err error
+    if recent {
+        // fetch the count of games from "days" number of days ago and later
+        rows, err = recentGameCountStmt.Query()
+    } else {
+        // fetch the total count of games
+        rows, err = recentGameCountStmt.Query()
+    }
+
     if err != nil {
         log.Fatal(err)
     }
@@ -72,7 +102,7 @@ func GetDailyGameCounts() []GameCount {
     for rows.Next() {
         err := rows.Scan(&gt, &count)
         if err != nil {
-            log.Fatal("Error scanning rows for GetDailyGameCounts()")
+            log.Fatal("Error scanning rows for GetGameCounts()")
         }
 
         gc := GameCount{gt, count}
@@ -82,20 +112,20 @@ func GetDailyGameCounts() []GameCount {
     return gameCounts
 }
 
-// GetDailyStatLine gets high-level statistics from the past 24 hours. 
-// In particular it retrieves the number of active players and games played,
-// but it also provides a breakdown of the top five most played game modes
-// and their respective game counts. Game modes not in the top five are 
-// placed into an "other" category along with a count.
-func GetDailyStatLine() DailyStat {
-    ds := DailyStat{}
+// GetSummaryStats gets high-level statistics for all-time or recently (with 
+// the "recent" flag). In particular it retrieves the number of active 
+// players and games played, but it also provides a breakdown of the top five
+// most played game modes and their respective game counts. Game modes not in
+// the top five are placed into an "other" category along with a count.
+func GetSummaryStats(recent bool) SummaryStat {
+    ds := SummaryStat{}
 
     // active players
-    ds.Players = GetDailyActivePlayers()
+    ds.Players = GetActivePlayers(recent)
 
     // note: this contains *all* game types, so we will have to check if it
     // needs to be pruned/condensed
-    gcs := GetDailyGameCounts()
+    gcs := GetGameCounts(recent)
 
     games := 0
     otherGames := 0

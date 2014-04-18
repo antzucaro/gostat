@@ -17,8 +17,9 @@ func Init(connString string) (err error) {
 
   // prepare all of the queries
   topNRanksStmt, err = db.Prepare(topNRanksSQL)
-  dailyActivePlayersStmt, err = db.Prepare(dailyActivePlayersSQL)
-  dailyGamesStmt, err = db.Prepare(dailyGamesSQL)
-
+  recentActivePlayersStmt, err = db.Prepare(recentActivePlayersSQL)
+  overallActivePlayersStmt, err = db.Prepare(overallActivePlayersSQL)
+  recentGameCountStmt, err = db.Prepare(recentGameCountSQL)
+  overallGameCountStmt, err = db.Prepare(overallGameCountSQL)
   return
 }
