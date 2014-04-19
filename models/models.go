@@ -18,6 +18,8 @@ func Init(connString string) (err error) {
   }
 
   // prepare all of the queries
+
+  // leaderboard
   topNRanksStmt = initStatement("topNRanksStmt", topNRanksSQL)
   recentActivePlayersStmt = initStatement("recentActivePlayersStmt", recentActivePlayersSQL)
   overallActivePlayersStmt = initStatement("overallActivePlayersStmt", overallActivePlayersSQL)
@@ -25,6 +27,7 @@ func Init(connString string) (err error) {
   overallGameCountStmt = initStatement("overallGameCountStmt", overallGameCountSQL)
   playerTimeStmt = initStatement("playerTimeStmt", playerTimeSQL)
   serverGamesStmt = initStatement("serverGamesStmt ", serverGamesSQL)
+  playerScoreStmt = initStatement("playerScoreStmt", playerScoreSQL)
 
   return
 }

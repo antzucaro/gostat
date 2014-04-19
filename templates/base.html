@@ -94,6 +94,25 @@
         </div>
         {{ end }}
 
+        {{ if .TopPlayersByScore }}
+        <div class="small-12 large-4 columns">
+          <table>
+              <tr>
+                  <th>#</th>
+                  <th>Nick</th>
+                  <th>Score</th>
+              </tr>
+              {{ range .TopPlayersByScore }}
+              <tr>
+                  <td></td>
+                  <td>{{ .Nick.HTML }}</td>
+                  <td>{{ .Score }}</td>
+              </tr>
+              {{ end }}
+          </table>
+        </div>
+        {{ end }}
+
         {{ if .TopServersByGames }}
         <div class="small-12 large-4 columns">
           <table>
