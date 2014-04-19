@@ -23,6 +23,7 @@ func Init(connString string) (err error) {
   overallActivePlayersStmt = initStatement("overallActivePlayersStmt", overallActivePlayersSQL)
   recentGameCountStmt = initStatement("recentGameCountStmt", recentGameCountSQL)
   overallGameCountStmt = initStatement("overallGameCountStmt", overallGameCountSQL)
+  playerTimeStmt = initStatement("playerTimeStmt", playerTimeSQL)
 
   return
 }
@@ -31,7 +32,8 @@ func Init(connString string) (err error) {
 func initStatement(name string, sql string) *sql.Stmt {
   stmt, err := db.Prepare(sql)
   if err != nil {
-      log.Fatal("Error preparing SQL statement " + name)
+      //log.Fatal("Error preparing SQL statement " + name)
+      log.Fatal(err)
   } else {
       log.Println("Prepared statement " + name)
   }

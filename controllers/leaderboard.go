@@ -15,20 +15,27 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
         DuelRanks []models.PlayerRank
         CTFRanks []models.PlayerRank
         DMRanks []models.PlayerRank
+        TopPlayersByTime []models.PlayerTime
     }
     var d data
 
+    // ranks
     d.DuelRanks = models.GetTopNRanks("duel", 10)
     d.CTFRanks = models.GetTopNRanks("ctf", 10)
     d.DMRanks = models.GetTopNRanks("dm", 10)
 
+    // the overall stat line
     oss := models.GetSummaryStats(false)
     osl := makeStatLine("Tracking ", oss, " since October 2011.")
     d.OverallStatLine = osl
 
+    // the daily stat line
     rss := models.GetSummaryStats(true)
     rsl := makeStatLine("", rss, " in the past 24 hours.")
     d.RecentStatLine = rsl
+
+    // top players by playing time
+    d.TopPlayersByTime = models.GetTopPlayersByTime(10, 0)
 
     templates.Render("leaderboard", w, d)
 }

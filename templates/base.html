@@ -68,5 +68,24 @@
       </table>
     </div>
 
+    {{ if .TopPlayersByTime }}
+    <div class="small-12 large-4 columns">
+      <table>
+          <tr>
+              <th>#</th>
+              <th>Nick</th>
+              <th>Time</th>
+          </tr>
+          {{ range .TopPlayersByTime }}
+          <tr>
+              <td></td>
+              <td>{{ .Nick.HTML }}</td>
+              <td>{{ .PlayTime }}</td>
+          </tr>
+          {{ end }}
+      </table>
+    </div>
+    {{ end }}
+
 </body>
 </html>
