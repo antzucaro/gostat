@@ -16,6 +16,7 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
         CTFRanks []models.PlayerRank
         DMRanks []models.PlayerRank
         TopPlayersByTime []models.PlayerTime
+        TopServersByGames []models.ServerGames
     }
     var d data
 
@@ -36,6 +37,9 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
 
     // top players by playing time
     d.TopPlayersByTime = models.GetTopPlayersByTime(10, 0)
+
+    // top servers by number of games
+    d.TopServersByGames = models.GetTopServersByGames(10, 0)
 
     templates.Render("leaderboard", w, d)
 }
