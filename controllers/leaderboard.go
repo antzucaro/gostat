@@ -18,6 +18,7 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
         TopPlayersByTime []models.PlayerTime
         TopPlayersByScore []models.PlayerScore
         TopServersByGames []models.ServerGames
+        RecentGames []models.RecentGame
     }
     var d data
 
@@ -44,6 +45,9 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
 
     // top servers by number of games
     d.TopServersByGames = models.GetTopServersByGames(10, 0)
+
+    // recent games
+    d.RecentGames = models.GetRecentGames(20, 0)
 
     templates.Render("leaderboard", w, d)
 }

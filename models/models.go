@@ -28,6 +28,7 @@ func Init(connString string) (err error) {
   playerTimeStmt = initStatement("playerTimeStmt", playerTimeSQL)
   serverGamesStmt = initStatement("serverGamesStmt ", serverGamesSQL)
   playerScoreStmt = initStatement("playerScoreStmt", playerScoreSQL)
+  recentGamesStmt = initStatement("recentGamesStmt", recentGamesSQL)
 
   return
 }

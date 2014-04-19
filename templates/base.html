@@ -133,5 +133,33 @@
         {{ end }}
     </div>
 
+    <div class="row">
+        {{ if .RecentGames }}
+        <div class="small-12 columns">
+          <table>
+              <tr>
+                  <th></th>
+                  <th>Type</th>
+                  <th>Server</th>
+                  <th>Map</th>
+                  <th>Time</th>
+                  <th>Winner</th>
+              </tr>
+              {{ range .RecentGames }}
+              <tr>
+                  <td></td>
+                  <td>{{ .GameType }}</td>
+                  <td>{{ .ServerName.HTML }}</td>
+                  <td>{{ .MapName }}</td>
+                  <td>{{ .GameDate }}</td>
+                  <td>{{ .WinnerNick.HTML }}</td>
+              </tr>
+              {{ end }}
+          </table>
+        </div>
+        {{ end }}
+
+    </div>
+
 </body>
 </html>
