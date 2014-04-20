@@ -17,6 +17,9 @@ func Init(connString string) (err error) {
     log.Fatal(err)
   }
 
+  // connection pooling
+  db.SetMaxIdleConns(5)
+
   // prepare all of the queries
 
   // leaderboard
