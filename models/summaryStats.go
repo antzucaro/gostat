@@ -118,6 +118,7 @@ func GetGameCounts(recent bool) []GameCount {
 // most played game modes and their respective game counts. Game modes not in
 // the top five are placed into an "other" category along with a count.
 func GetSummaryStats(recent bool) SummaryStats {
+
     ds := SummaryStats{}
 
     // active players

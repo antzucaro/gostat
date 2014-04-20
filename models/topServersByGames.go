@@ -14,7 +14,7 @@ type ServerGames struct {
     Games int
 }
 
-const serverGamesDays = "21"
+const serverGamesDays = "7"
 
 const serverGamesSQL = `select s.server_id, s.name, count(*) games
 from servers s join games g on s.server_id = g.server_id

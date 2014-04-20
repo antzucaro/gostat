@@ -19,7 +19,7 @@ type RecentGame struct {
     WinnerNick qstr.QStr
 }
 
-const recentGameDays = "90"
+const recentGameDays = "7"
 
 const recentGamesSQL = `select g.game_type_cd, s.server_id, s.name, m.map_id, m.name,
 g.create_dt, pgs.player_id, pgs.nick
@@ -40,6 +40,7 @@ var recentGamesStmt *sql.Stmt
 // returned can be be constrained to a specific window within the result set
 // via the "limit" and "offset" parameters.
 func GetRecentGames(limit int, offset int) []RecentGame {
+
     rows, err := recentGamesStmt.Query(limit, offset)
     if err != nil {
         log.Fatal("Error running query recentGamesStmt.")

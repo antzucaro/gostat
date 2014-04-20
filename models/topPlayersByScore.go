@@ -14,7 +14,7 @@ type PlayerScore struct {
     Score int
 }
 
-const playScoreDays = "21"
+const playScoreDays = "7"
 
 const playerScoreSQL = `select player_id, nick, sum(score)
 from player_game_stats

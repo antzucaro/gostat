@@ -16,7 +16,7 @@ type PlayerTime struct {
     PlayTime time.Duration
 }
 
-const playTimeDays = "21"
+const playTimeDays = "7"
 
 const playerTimeSQL = `select p.player_id, p.nick, 
 extract(epoch from sum(pgs.alivetime)) playtime 
