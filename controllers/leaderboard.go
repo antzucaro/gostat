@@ -20,6 +20,16 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
         TopServersByGames []models.ServerGames
         RecentGames []models.RecentGame
     }
+
+    // check the cache first
+    cachedLeaderboard, ok := cache["Leaderboard"]
+    if ok {
+        println("Found in cache!")
+        templates.Render("leaderboard", w, cachedLeaderboard)
+        return
+    }
+
+    // otherwise construct it new
     var d data
 
     // ranks
@@ -48,6 +58,9 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
 
     // recent games
     d.RecentGames = models.GetRecentGames(20, 0)
+
+    // since we've done all this work, cache it!
+    cache["Leaderboard"] = d
 
     templates.Render("leaderboard", w, d)
 }

@@ -13,6 +13,9 @@ func main() {
   // establish database connection, prepare queries
   models.Init("user=xonstat host=localhost dbname=xonstatdb sslmode=disable")
 
+  // establish http response cache
+  controllers.Init()
+
   // templates
   templates.Init()
 
