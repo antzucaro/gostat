@@ -63,6 +63,27 @@ func (c *RGBColor) HSL() (h HSLColor) {
 	return
 }
 
+// Capped returns an RGB color that is trimmed to have a lightness
+// value between floor and ceiling, where floor < ceiling and both
+// floor and ceiling are of the range [0.0, 1.0]
+func (c *RGBColor) Capped(floor float64, ceiling float64) (r RGBColor) {
+    // check invalid values
+    if floor >= ceiling || floor < 0 || ceiling > 1 {
+        return *c
+    }
+
+    h := c.HSL()
+    if h.L < floor {
+        h.L = floor
+    } else if h.L > ceiling {
+        h.L = ceiling
+    } else {
+        // no need to do any conversion, just return back what we had before
+        return *c
+    }
+    return h.RGB()
+}
+
 // HSLColor is a color in the HSL space.
 type HSLColor struct {
     // Hue
