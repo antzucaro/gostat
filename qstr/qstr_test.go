@@ -36,3 +36,37 @@ func TestHSL(t *testing.T) {
         }
     }
 }
+
+func TestCappedLow(t *testing.T) {
+    c := RGBColor{255, 255, 255}
+    cbar := c.Capped(0.0, 0.5)
+    h := cbar.HSL()
+
+    // some flexibility needed due to the rounding to int
+    if h.L > 0.51 {
+           t.Errorf("Incorrect HSL cap for RGB color %v. Expected: <= 50.0, Got: %v.", c, h.L)
+    }
+}
+
+func TestCappedMid(t *testing.T) {
+    c := RGBColor{127, 127, 127}
+    cbar := c.Capped(0.25, 0.75)
+    h := cbar.HSL()
+
+    // some flexibility needed due to the rounding to int
+    // but essentially it must remain in the same range as before
+    if h.L < 0.49 || h.L > 0.51 {
+           t.Errorf("Incorrect HSL cap for RGB color %v. Expected around 50.0, Got: %v.", c, h.L)
+    }
+}
+
+func TestCappedHigh(t *testing.T) {
+    c := RGBColor{0, 0, 0}
+    cbar := c.Capped(0.5, 1)
+    h := cbar.HSL()
+
+    // some flexibility needed due to the rounding to int
+    if h.L < 0.5 {
+           t.Errorf("Incorrect HSL cap for RGB color %v. Expected: >= 50.0, Got: %v.", c, h.L)
+    }
+}
