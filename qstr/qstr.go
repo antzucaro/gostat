@@ -22,6 +22,22 @@ type RGBColor struct {
 	B int
 }
 
+// HexToRGB converts a sequence of three hexadecimal characters into an RGBColor
+func HexToRGB(r string, g string, b string) (c RGBColor) {
+
+	red, _ := strconv.ParseInt(fmt.Sprintf("%s%s", r, r), 16, 0)
+	green, _ := strconv.ParseInt(fmt.Sprintf("%s%s", g, g), 16, 0)
+	blue, _ := strconv.ParseInt(fmt.Sprintf("%s%s", b, b), 16, 0)
+
+    return RGBColor{int(red), int(green), int(blue)}
+}
+
+// SpanStr converts an RGBColor into a string representing an 
+// HTML span with inline coloring
+func (c *RGBColor) SpanStr() string {
+    return fmt.Sprintf("<span style=\"color:rgb(%d,%d,%d)\">", c.R, c.G, c.B)
+}
+
 // HSL converts an RGBColor to a HSLColor
 //
 // Adapted from http://code.google.com/p/gorilla/source/browse/color/hsl.go,
@@ -147,15 +163,6 @@ var allColors = regexp.MustCompile(`\^(\d|x[\dA-Fa-f]{3})`)
 var decColors = regexp.MustCompile(`\^(\d)`)
 var hexColors = regexp.MustCompile(`\^x([\dA-Fa-f])([\dA-Fa-f])([\dA-Fa-f])`)
 
-func hexToRGBSpanStr(r string, g string, b string) string {
-
-	red, _ := strconv.ParseInt(fmt.Sprintf("%s%s", r, r), 16, 0)
-	green, _ := strconv.ParseInt(fmt.Sprintf("%s%s", g, g), 16, 0)
-	blue, _ := strconv.ParseInt(fmt.Sprintf("%s%s", b, b), 16, 0)
-
-	return fmt.Sprintf("<span style=\"color:rgb(%d,%d,%d)\">", red, green, blue)
-}
-
 type QStr string
 
 func (s *QStr) Stripped() string {
@@ -191,9 +198,12 @@ func (s *QStr) HTML() template.HTML {
 
 	// substitute matches of the form ^xrgb
 	// with r, g, and b being hexadecimal digits
+    // also cap the lightness to be in the given range
 	matchedHexStrings := hexColors.FindAllStringSubmatch(r, -1)
 	for _, v := range matchedHexStrings {
-		r = strings.Replace(r, v[0], hexToRGBSpanStr(v[1], v[2], v[3]), 1)
+        c := HexToRGB(v[1], v[2], v[3])
+        c = c.Capped(0.5, 1.0)
+		r = strings.Replace(r, v[0], c.SpanStr(), 1)
 	}
 
 	// add the appropriate amount of closing spans
