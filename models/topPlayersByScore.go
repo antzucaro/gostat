@@ -9,12 +9,13 @@ import (
 // A PlayerScore represents the accumulated score of a player over
 // an unspecified time window.
 type PlayerScore struct {
+    N int
     PlayerID int
     Nick qstr.QStr
     Score int
 }
 
-const playScoreDays = "7"
+const playScoreDays = "30"
 
 const playerScoreSQL = `select player_id, nick, sum(score)
 from player_game_stats
@@ -41,6 +42,7 @@ func GetTopPlayersByScore(limit int, offset int) []PlayerScore {
 
     playerScores := make([]PlayerScore, 0, limit)
 
+    n := 1
     var playerID int
     var nick string
     var score int
@@ -48,9 +50,11 @@ func GetTopPlayersByScore(limit int, offset int) []PlayerScore {
     for rows.Next() {
         rows.Scan(&playerID, &nick, &score)
 
-        ps := PlayerScore{playerID, qstr.QStr(nick), score}
+        ps := PlayerScore{n, playerID, qstr.QStr(nick), score}
 
         playerScores = append(playerScores, ps)
+
+        n += 1
     }
 
     return playerScores

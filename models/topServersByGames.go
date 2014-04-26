@@ -9,12 +9,13 @@ import (
 // A ServerTime represents the number of games hosted by a server during
 // an unspecified time window.
 type ServerGames struct {
+    N int
     ServerID int
     Name qstr.QStr
     Games int
 }
 
-const serverGamesDays = "7"
+const serverGamesDays = "30"
 
 const serverGamesSQL = `select s.server_id, s.name, count(*) games
 from servers s join games g on s.server_id = g.server_id
@@ -39,6 +40,7 @@ func GetTopServersByGames(limit int, offset int) []ServerGames {
 
     serverGames := make([]ServerGames, 0, limit)
 
+    n := 1
     var serverID int
     var name string
     var games int
@@ -46,9 +48,11 @@ func GetTopServersByGames(limit int, offset int) []ServerGames {
     for rows.Next() {
         rows.Scan(&serverID, &name, &games)
 
-        sg := ServerGames{serverID, qstr.QStr(name), games}
+        sg := ServerGames{n, serverID, qstr.QStr(name), games}
 
         serverGames = append(serverGames, sg)
+
+        n += 1
     }
 
     return serverGames

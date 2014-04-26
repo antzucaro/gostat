@@ -85,7 +85,7 @@
               </tr>
               {{ range .TopPlayersByTime }}
               <tr>
-                  <td></td>
+                  <td>{{ .N }}</td>
                   <td>{{ .Nick.HTML }}</td>
                   <td>{{ .PlayTime }}</td>
               </tr>
@@ -104,7 +104,7 @@
               </tr>
               {{ range .TopPlayersByScore }}
               <tr>
-                  <td></td>
+                  <td>{{ .N }}</td>
                   <td>{{ .Nick.HTML }}</td>
                   <td>{{ .Score }}</td>
               </tr>
@@ -123,7 +123,7 @@
               </tr>
               {{ range .TopServersByGames }}
               <tr>
-                  <td></td>
+                  <td>{{ .N }}</td>
                   <td>{{ .Name.HTML }}</td>
                   <td>{{ .Games }}</td>
               </tr>

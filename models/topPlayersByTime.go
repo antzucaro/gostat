@@ -11,12 +11,13 @@ import (
 // A PlayerTime represents the amount of time a given player has played during
 // an unspecified time window.
 type PlayerTime struct {
+    N int
     PlayerID int
     Nick qstr.QStr
     PlayTime time.Duration
 }
 
-const playTimeDays = "7"
+const playTimeDays = "30"
 
 const playerTimeSQL = `select p.player_id, p.nick, 
 extract(epoch from sum(pgs.alivetime)) playtime 
@@ -40,6 +41,7 @@ func GetTopPlayersByTime(limit int, offset int) []PlayerTime {
 
     playerTimes := make([]PlayerTime, 0, limit)
 
+    n := 1
     var playerID int
     var nick string
     var playertime int
@@ -56,9 +58,11 @@ func GetTopPlayersByTime(limit int, offset int) []PlayerTime {
             log.Fatal("Error converting the alivetime value in GetTopPlayersByTime.")
         }
 
-        pt := PlayerTime{playerID, qstr.QStr(nick), d}
+        pt := PlayerTime{n, playerID, qstr.QStr(nick), d}
 
         playerTimes = append(playerTimes, pt)
+
+        n += 1
     }
 
     return playerTimes
