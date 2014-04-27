@@ -11,7 +11,7 @@ func main() {
   m := martini.Classic()
 
   // establish database connection, prepare queries
-  models.Init("user=xonstat host=localhost dbname=xonstatdb sslmode=disable")
+  models.Init()
 
   // establish http response cache
   controllers.Init()

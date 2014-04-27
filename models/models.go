@@ -2,6 +2,7 @@ package models
 
 import (
     _ "github.com/lib/pq"
+    "github.com/antzucaro/gostat/config"
     "database/sql"
     "log"
 )
@@ -10,9 +11,9 @@ import (
 var db *sql.DB
 
 // Init opens a connection to the database and prepares all of the queries
-func Init(connString string) (err error) {
+func Init() (err error) {
   // establish a database connection
-  db, err = sql.Open("postgres", connString)
+  db, err = sql.Open("postgres", config.Config.ConnStr)
   if err != nil {
     log.Fatal(err)
   }
