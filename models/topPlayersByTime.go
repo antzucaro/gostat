@@ -2,6 +2,7 @@ package models
 
 import (
     "database/sql"
+    "github.com/antzucaro/gostat/config"
     "github.com/antzucaro/gostat/qstr"
     "log"
     "strconv"
@@ -17,15 +18,13 @@ type PlayerTime struct {
     PlayTime time.Duration
 }
 
-const playTimeDays = "30"
-
-const playerTimeSQL = `select p.player_id, p.nick, 
+var playerTimeSQL = `select p.player_id, p.nick, 
 extract(epoch from sum(pgs.alivetime)) playtime 
 from players p join player_game_stats pgs 
 on p.player_id = pgs.player_id 
 and p.player_id > 2 
 and pgs.create_dt > now() at time zone 'utc' - interval '` + 
-playTimeDays + ` days'
+config.Config.TopPlayersByTimeDays + ` days'
 group by p.player_id, p.nick 
 order by sum(pgs.alivetime) desc 
 limit $1 

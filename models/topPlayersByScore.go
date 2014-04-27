@@ -2,6 +2,7 @@ package models
 
 import (
     "database/sql"
+    "github.com/antzucaro/gostat/config"
     "github.com/antzucaro/gostat/qstr"
     "log"
 )
@@ -15,12 +16,10 @@ type PlayerScore struct {
     Score int
 }
 
-const playScoreDays = "30"
-
-const playerScoreSQL = `select player_id, nick, sum(score)
+var playerScoreSQL = `select player_id, nick, sum(score)
 from player_game_stats
 where create_dt > now() at time zone 'utc' - interval '` + 
-playScoreDays + ` days'
+config.Config.TopPlayersByScoreDays + ` days'
 and player_id >= 2
 and nick != 'Anonymous Player' 
 group by player_id, nick

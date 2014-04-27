@@ -2,6 +2,7 @@ package models
 
 import (
     "database/sql"
+    "github.com/antzucaro/gostat/config"
     "github.com/antzucaro/gostat/qstr"
     "log"
 )
@@ -15,12 +16,10 @@ type ServerGames struct {
     Games int
 }
 
-const serverGamesDays = "30"
-
-const serverGamesSQL = `select s.server_id, s.name, count(*) games
+var serverGamesSQL = `select s.server_id, s.name, count(*) games
 from servers s join games g on s.server_id = g.server_id
 where g.create_dt > now() at time zone 'utc' - interval '` + 
-serverGamesDays + ` days'
+config.Config.TopServersByGamesDays + ` days'
 group by s.server_id, s.name
 order by 3 desc
 limit $1 
