@@ -10,6 +10,9 @@ type config struct {
     // database connection string
     ConnStr string
 
+	// how far back to retrieve the "summary stats" line at the top of the page
+	SummaryStatsDays  string
+
 	// how far back to retrieve the "top players by time" stats
 	TopPlayersByTimeDays  string
 
@@ -29,6 +32,7 @@ var Config = new(config)
 func init() {
 	// defaults
     Config.ConnStr = "user=xonstat host=localhost dbname=xonstatdb sslmode=disable"
+    Config.SummaryStatsDays = "30"
     Config.TopPlayersByTimeDays = "30"
     Config.TopPlayersByScoreDays = "30"
     Config.TopServersByGamesDays = "30"

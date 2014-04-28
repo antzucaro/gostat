@@ -1,5 +1,6 @@
 {
   "ConnStr": "user=xonstat host=localhost dbname=xonstatdb sslmode=disable",
+  "SummaryStatsDays": "30",
   "TopPlayersByTimeDays": "30",
   "TopPlayersByScoreDays": "30",
   "TopServersByGamesDays": "30",
