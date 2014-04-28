@@ -2,6 +2,7 @@ package models
 
 import (
     "database/sql"
+    "github.com/antzucaro/gostat/config"
     "log"
 )
 
@@ -18,13 +19,11 @@ type SummaryStats struct {
     OtherGames int
 }
 
-// how many days is "recent"?
-const days = "1"
-
-const recentActivePlayersSQL = `SELECT count(distinct player_id) 
+var recentActivePlayersSQL = `SELECT count(distinct player_id) 
 FROM player_game_stats 
 WHERE player_id > 1
-AND create_dt >= now() at time zone 'utc' - interval '` + days + " days'"
+AND create_dt >= now() at time zone 'utc' - interval '` + 
+config.Config.SummaryStatsDays + " days'"
 
 var recentActivePlayersStmt *sql.Stmt
 
@@ -69,9 +68,10 @@ ORDER BY count(*) desc`
 
 var overallGameCountStmt *sql.Stmt
 
-const recentGameCountSQL = `SELECT game_type_cd, count(*) 
+var recentGameCountSQL = `SELECT game_type_cd, count(*) 
 FROM games 
-WHERE create_dt >= now() at time zone 'utc' - interval '` + days + " days' " + 
+WHERE create_dt >= now() at time zone 'utc' - interval '` + 
+config.Config.SummaryStatsDays + " days' " + 
 `GROUP BY game_type_cd
 ORDER BY count(*) desc`
 
