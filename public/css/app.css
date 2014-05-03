@@ -14,13 +14,32 @@ body {
     background-color: #000000;
     background: url('/img/background.jpg') no-repeat fixed center center / cover  #000;
     color: #D0D0D0;
+}
+
+body, h1, h2, h3, h4, h5, p, span {
     font-family: "XoloniumNormal", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #D0D0D0;
+}
+
+table, th, td {
+    background: none repeat scroll 0px 0px rgba(0, 0, 0, 0.698);
+    border: 1px solid #436688;
+    border-collapse: collapse;
+    font-size: 10px;
+    padding: 5px;
+    text-align: left;
 }
 
 th {
     background-color: #001021;
+    font-size: 12px;
 }
 
 td {
-    border: 1px solid #436688;
+    padding: 5px;
 }
+
+
