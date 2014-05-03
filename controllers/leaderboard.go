@@ -15,6 +15,7 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
         DuelRanks []models.PlayerRank
         CTFRanks []models.PlayerRank
         DMRanks []models.PlayerRank
+        TDMRanks []models.PlayerRank
         TopPlayersByTime []models.PlayerTime
         TopPlayersByScore []models.PlayerScore
         TopServersByGames []models.ServerGames
@@ -36,6 +37,7 @@ func Leaderboard(w http.ResponseWriter, r *http.Request) {
     d.DuelRanks = models.GetTopNRanks("duel", 10)
     d.CTFRanks = models.GetTopNRanks("ctf", 10)
     d.DMRanks = models.GetTopNRanks("dm", 10)
+    d.TDMRanks = models.GetTopNRanks("tdm", 10)
 
     // the overall stat line
     oss := models.GetSummaryStats(false)
