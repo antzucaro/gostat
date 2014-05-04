@@ -14,7 +14,7 @@
 
     <div class="row">
         {{ if .OverallStatLine }}
-        <div class="small-12 columns">
+        <div class="small-12 columns statline">
             {{ .OverallStatLine }}
         </div>
         {{ end }}
@@ -22,7 +22,7 @@
 
     <div class="row">
         {{ if .RecentStatLine }}
-        <div class="small-12 columns">
+        <div class="small-12 columns statline">
             {{ .RecentStatLine }}
         </div>
         {{ end }}
@@ -169,6 +169,7 @@
     <div class="row">
         {{ if .RecentGames }}
         <div class="small-12 columns">
+          <h5>Recent Games</h5>
           <table>
               <tr>
                   <th></th>

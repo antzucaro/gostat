@@ -42,4 +42,10 @@ td {
     padding: 5px;
 }
 
-
+.statline {
+    color: white;
+    font-family: sans;
+    font-size: 12px;
+    margin-bottom: 10px;
+    text-align: center;
+}
