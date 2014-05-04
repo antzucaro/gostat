@@ -30,7 +30,7 @@
 
     <div class="row">
         <div class="small-12 large-3 columns">
-          <h4>Duel Ranks</h4>
+          <h5>Duel Ranks</h5>
           <table>
               <tr>
                   <th>#</th>
@@ -48,7 +48,7 @@
         </div>
 
         <div class="small-12 large-3 columns">
-          <h4>CTF Ranks</h4>
+          <h5>CTF Ranks</h5>
           <table>
               <tr>
                   <th>#</th>
@@ -66,7 +66,7 @@
         </div>
 
         <div class="small-12 large-3 columns">
-          <h4>DM Ranks</h4>
+          <h5>DM Ranks</h5>
           <table>
               <tr>
                   <th>#</th>
@@ -84,7 +84,7 @@
         </div>
 
         <div class="small-12 large-3 columns">
-          <h4>TDM Ranks</h4>
+          <h5>TDM Ranks</h5>
           <table>
               <tr>
                   <th>#</th>
@@ -106,6 +106,7 @@
     <div class="row">
         {{ if .TopPlayersByTime }}
         <div class="small-12 large-4 columns">
+          <h5>Most Active Players</h5>
           <table>
               <tr>
                   <th>#</th>
@@ -123,27 +124,9 @@
         </div>
         {{ end }}
 
-        {{ if .TopPlayersByScore }}
-        <div class="small-12 large-4 columns">
-          <table>
-              <tr>
-                  <th>#</th>
-                  <th>Nick</th>
-                  <th>Score</th>
-              </tr>
-              {{ range .TopPlayersByScore }}
-              <tr>
-                  <td>{{ .N }}</td>
-                  <td>{{ .Nick.HTML }}</td>
-                  <td>{{ .Score }}</td>
-              </tr>
-              {{ end }}
-          </table>
-        </div>
-        {{ end }}
-
         {{ if .TopServersByGames }}
         <div class="small-12 large-4 columns">
+          <h5>Most Active Servers</h5>
           <table>
               <tr>
                   <th>#</th>
@@ -160,6 +143,27 @@
           </table>
         </div>
         {{ end }}
+
+        {{ if .TopMapsByGames }}
+        <div class="small-12 large-4 columns">
+          <h5>Most Active Maps</h5>
+          <table>
+              <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Games</th>
+              </tr>
+              {{ range .TopMapsByGames }}
+              <tr>
+                  <td>{{ .N }}</td>
+                  <td>{{ .Name }}</td>
+                  <td>{{ .Games }}</td>
+              </tr>
+              {{ end }}
+          </table>
+        </div>
+        {{ end }}
+
     </div>
 
     <div class="row">

@@ -31,6 +31,7 @@ func Init() (err error) {
   overallGameCountStmt = initStatement("overallGameCountStmt", overallGameCountSQL)
   playerTimeStmt = initStatement("playerTimeStmt", playerTimeSQL)
   serverGamesStmt = initStatement("serverGamesStmt ", serverGamesSQL)
+  mapGamesStmt = initStatement("mapGamesStmt ", mapGamesSQL)
   playerScoreStmt = initStatement("playerScoreStmt", playerScoreSQL)
   recentGamesStmt = initStatement("recentGamesStmt", recentGamesSQL)
 
