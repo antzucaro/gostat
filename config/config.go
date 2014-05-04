@@ -22,6 +22,9 @@ type config struct {
 	// how far back to retrieve the "top servers by games" stats
 	TopServersByGamesDays string
 
+	// how far back to retrieve the "top maps by games" stats
+	TopMapsByGamesDays string
+
     // how far back to retrieve recent games
     RecentGamesDays string
 }
@@ -36,6 +39,7 @@ func init() {
     Config.TopPlayersByTimeDays = "30"
     Config.TopPlayersByScoreDays = "30"
     Config.TopServersByGamesDays = "30"
+    Config.TopMapsByGamesDays = "30"
     Config.RecentGamesDays = "30"
 
     // set the config file path via environment variable
