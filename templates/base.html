@@ -181,7 +181,7 @@
               </tr>
               {{ range .RecentGames }}
               <tr>
-                  <td></td>
+                  <td><a href="http://stats.xonotic.org/game/{{ .GameID }}" class="tiny button">view</a></td>
                   <td>{{ .GameType }}</td>
                   <td>{{ .ServerName.HTML }}</td>
                   <td>{{ .MapName }}</td>

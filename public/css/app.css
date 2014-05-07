@@ -49,3 +49,7 @@ td {
     margin-bottom: 10px;
     text-align: center;
 }
+
+.button {
+    margin: 0;
+}
