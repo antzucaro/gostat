@@ -182,7 +182,7 @@
               {{ range .RecentGames }}
               <tr>
                   <td><a href="http://stats.xonotic.org/game/{{ .GameID }}" class="tiny button">view</a></td>
-                  <td>{{ .GameType }}</td>
+                  <td><span class="sprite sprite-{{ .GameType }}" alt="{{ .GameType }}"></span></td>
                   <td>{{ .ServerName.HTML }}</td>
                   <td>{{ .MapName }}</td>
                   <td>{{ .GameDate }}</td>
