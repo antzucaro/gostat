@@ -31,7 +31,7 @@
     <div class="row">
         <div class="small-12 large-3 columns">
           <h5>Duel Ranks</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th>#</th>
                   <th>Nick</th>
@@ -49,7 +49,7 @@
 
         <div class="small-12 large-3 columns">
           <h5>CTF Ranks</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th>#</th>
                   <th>Nick</th>
@@ -67,7 +67,7 @@
 
         <div class="small-12 large-3 columns">
           <h5>DM Ranks</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th>#</th>
                   <th>Nick</th>
@@ -85,7 +85,7 @@
 
         <div class="small-12 large-3 columns">
           <h5>TDM Ranks</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th>#</th>
                   <th>Nick</th>
@@ -107,7 +107,7 @@
         {{ if .TopPlayersByTime }}
         <div class="small-12 large-4 columns">
           <h5>Most Active Players</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th>#</th>
                   <th>Nick</th>
@@ -127,7 +127,7 @@
         {{ if .TopServersByGames }}
         <div class="small-12 large-4 columns">
           <h5>Most Active Servers</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th>#</th>
                   <th>Name</th>
@@ -147,7 +147,7 @@
         {{ if .TopMapsByGames }}
         <div class="small-12 large-4 columns">
           <h5>Most Active Maps</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th>#</th>
                   <th>Name</th>
@@ -170,7 +170,7 @@
         {{ if .RecentGames }}
         <div class="small-12 columns">
           <h5>Recent Games</h5>
-          <table>
+          <table class="fullwidth">
               <tr>
                   <th></th>
                   <th>Type</th>
@@ -193,6 +193,12 @@
         </div>
         {{ end }}
 
+    </div>
+
+    <div class="row">
+        <div class="small-12 columns">
+            <p class="text-center">This is a <a href="http://www.github.com/antzucaro/gostat">proof of concept</a> by <a href="http://www.github.com/antzucaro">Antibody</a>. Check <a href="http://www.github.com/antzucaro/xonstat">here</a> for the <a href="http://stats.xonotic.org">real deal</a>.</p>
+        </div>
     </div>
 
 </body>

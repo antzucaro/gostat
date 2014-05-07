@@ -42,6 +42,10 @@ td {
     padding: 5px;
 }
 
+.fullwidth {
+    width: 100%;
+}
+
 .statline {
     color: white;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
