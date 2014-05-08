@@ -1,25 +1,25 @@
 package models
 
 import (
-    "database/sql"
-    "github.com/antzucaro/gostat/config"
-    "github.com/antzucaro/gostat/qstr"
-    "log"
+	"database/sql"
+	"github.com/antzucaro/gostat/config"
+	"github.com/antzucaro/gostat/qstr"
+	"log"
 )
 
 // A ServerTime represents the number of games hosted by a server during
 // an unspecified time window.
 type ServerGames struct {
-    N int
-    ServerID int
-    Name qstr.QStr
-    Games int
+	N        int
+	ServerID int
+	Name     qstr.QStr
+	Games    int
 }
 
 var serverGamesSQL = `select s.server_id, s.name, count(*) games
 from servers s join games g on s.server_id = g.server_id
-where g.create_dt > now() at time zone 'utc' - interval '` + 
-config.Config.TopServersByGamesDays + ` days'
+where g.create_dt > now() at time zone 'utc' - interval '` +
+	config.Config.TopServersByGamesDays + ` days'
 group by s.server_id, s.name
 order by 3 desc
 limit $1 
@@ -32,27 +32,27 @@ var serverGamesStmt *sql.Stmt
 // descending order. The limit and offset parameters can be used to move a
 // limited-size window around within the result set.
 func GetTopServersByGames(limit int, offset int) []ServerGames {
-    rows, err := serverGamesStmt.Query(limit, offset)
-    if err != nil {
-        log.Fatal("Error running query serverGamesStmt.")
-    }
+	rows, err := serverGamesStmt.Query(limit, offset)
+	if err != nil {
+		log.Fatal("Error running query serverGamesStmt.")
+	}
 
-    serverGames := make([]ServerGames, 0, limit)
+	serverGames := make([]ServerGames, 0, limit)
 
-    n := 1
-    var serverID int
-    var name string
-    var games int
+	n := 1
+	var serverID int
+	var name string
+	var games int
 
-    for rows.Next() {
-        rows.Scan(&serverID, &name, &games)
+	for rows.Next() {
+		rows.Scan(&serverID, &name, &games)
 
-        sg := ServerGames{n, serverID, qstr.QStr(name), games}
+		sg := ServerGames{n, serverID, qstr.QStr(name), games}
 
-        serverGames = append(serverGames, sg)
+		serverGames = append(serverGames, sg)
 
-        n += 1
-    }
+		n += 1
+	}
 
-    return serverGames
+	return serverGames
 }

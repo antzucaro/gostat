@@ -4,6 +4,6 @@ package controllers
 var cache map[string]interface{}
 
 func Init() {
-  // set up the cache
-  cache = make(map[string]interface{})
+	// set up the cache
+	cache = make(map[string]interface{})
 }

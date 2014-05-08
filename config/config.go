@@ -1,20 +1,20 @@
 package config
 
 import (
-    "encoding/json"
-    "fmt"
-    "os"
+	"encoding/json"
+	"fmt"
+	"os"
 )
 
 type config struct {
-    // database connection string
-    ConnStr string
+	// database connection string
+	ConnStr string
 
 	// how far back to retrieve the "summary stats" line at the top of the page
-	SummaryStatsDays  string
+	SummaryStatsDays string
 
 	// how far back to retrieve the "top players by time" stats
-	TopPlayersByTimeDays  string
+	TopPlayersByTimeDays string
 
 	// how far back to retrieve the "top players by score" stats
 	TopPlayersByScoreDays string
@@ -25,8 +25,8 @@ type config struct {
 	// how far back to retrieve the "top maps by games" stats
 	TopMapsByGamesDays string
 
-    // how far back to retrieve recent games
-    RecentGamesDays string
+	// how far back to retrieve recent games
+	RecentGamesDays string
 }
 
 var Path = "./config.json"
@@ -34,15 +34,15 @@ var Config = new(config)
 
 func init() {
 	// defaults
-    Config.ConnStr = "user=xonstat host=localhost dbname=xonstatdb sslmode=disable"
-    Config.SummaryStatsDays = "30"
-    Config.TopPlayersByTimeDays = "30"
-    Config.TopPlayersByScoreDays = "30"
-    Config.TopServersByGamesDays = "30"
-    Config.TopMapsByGamesDays = "30"
-    Config.RecentGamesDays = "30"
+	Config.ConnStr = "user=xonstat host=localhost dbname=xonstatdb sslmode=disable"
+	Config.SummaryStatsDays = "30"
+	Config.TopPlayersByTimeDays = "30"
+	Config.TopPlayersByScoreDays = "30"
+	Config.TopServersByGamesDays = "30"
+	Config.TopMapsByGamesDays = "30"
+	Config.RecentGamesDays = "30"
 
-    // set the config file path via environment variable
+	// set the config file path via environment variable
 	if ecp := os.Getenv("GOSTAT_CONFIG"); ecp != "" {
 		Path = ecp
 	}

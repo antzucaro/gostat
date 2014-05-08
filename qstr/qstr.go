@@ -12,13 +12,13 @@ import (
 
 // RGBColor is a color in the RGB space. R, G, and B are in the range [0, 255]
 type RGBColor struct {
-    // Red
+	// Red
 	R int
 
-    // Green
+	// Green
 	G int
 
-    // Blue
+	// Blue
 	B int
 }
 
@@ -29,13 +29,13 @@ func HexToRGB(r string, g string, b string) (c RGBColor) {
 	green, _ := strconv.ParseInt(fmt.Sprintf("%s%s", g, g), 16, 0)
 	blue, _ := strconv.ParseInt(fmt.Sprintf("%s%s", b, b), 16, 0)
 
-    return RGBColor{int(red), int(green), int(blue)}
+	return RGBColor{int(red), int(green), int(blue)}
 }
 
-// SpanStr converts an RGBColor into a string representing an 
+// SpanStr converts an RGBColor into a string representing an
 // HTML span with inline coloring
 func (c *RGBColor) SpanStr() string {
-    return fmt.Sprintf("<span style=\"color:rgb(%d,%d,%d)\">", c.R, c.G, c.B)
+	return fmt.Sprintf("<span style=\"color:rgb(%d,%d,%d)\">", c.R, c.G, c.B)
 }
 
 // HSL converts an RGBColor to a HSLColor
@@ -83,32 +83,32 @@ func (c *RGBColor) HSL() (h HSLColor) {
 // value between floor and ceiling, where floor < ceiling and both
 // floor and ceiling are of the range [0.0, 1.0]
 func (c *RGBColor) Capped(floor float64, ceiling float64) (r RGBColor) {
-    // check invalid values
-    if floor >= ceiling || floor < 0 || ceiling > 1 {
-        return *c
-    }
+	// check invalid values
+	if floor >= ceiling || floor < 0 || ceiling > 1 {
+		return *c
+	}
 
-    h := c.HSL()
-    if h.L < floor {
-        h.L = floor
-    } else if h.L > ceiling {
-        h.L = ceiling
-    } else {
-        // no need to do any conversion, just return back what we had before
-        return *c
-    }
-    return h.RGB()
+	h := c.HSL()
+	if h.L < floor {
+		h.L = floor
+	} else if h.L > ceiling {
+		h.L = ceiling
+	} else {
+		// no need to do any conversion, just return back what we had before
+		return *c
+	}
+	return h.RGB()
 }
 
 // HSLColor is a color in the HSL space.
 type HSLColor struct {
-    // Hue
+	// Hue
 	H float64
 
-    // Saturation
+	// Saturation
 	S float64
 
-    // Lightness
+	// Lightness
 	L float64
 }
 
@@ -117,46 +117,46 @@ type HSLColor struct {
 // Adapted from http://code.google.com/p/gorilla/source/browse/color/hsl.go,
 // Ported from http://goo.gl/Vg1h9
 func (c *HSLColor) RGB() (r RGBColor) {
-        var fR, fG, fB float64
-        if c.S == 0 {
-                fR, fG, fB = c.L, c.L, c.L
-        } else {
-                var q float64
-                if c.L < 0.5 {
-                        q = c.L * (1 + c.S)
-                } else {
-                        q = c.L + c.S - c.S*c.L
-                }
-                p := 2*c.L - q
-                fR = hueToRGB(p, q, c.H+1.0/3)
-                fG = hueToRGB(p, q, c.H)
-                fB = hueToRGB(p, q, c.H-1.0/3)
-        }
-        r.R = int((fR * 255) + 0.5)
-        r.G = int((fG * 255) + 0.5)
-        r.B = int((fB * 255) + 0.5)
-        return
+	var fR, fG, fB float64
+	if c.S == 0 {
+		fR, fG, fB = c.L, c.L, c.L
+	} else {
+		var q float64
+		if c.L < 0.5 {
+			q = c.L * (1 + c.S)
+		} else {
+			q = c.L + c.S - c.S*c.L
+		}
+		p := 2*c.L - q
+		fR = hueToRGB(p, q, c.H+1.0/3)
+		fG = hueToRGB(p, q, c.H)
+		fB = hueToRGB(p, q, c.H-1.0/3)
+	}
+	r.R = int((fR * 255) + 0.5)
+	r.G = int((fG * 255) + 0.5)
+	r.B = int((fB * 255) + 0.5)
+	return
 }
 
 // hueToRGB is a helper function for HSLToRGB.
 // Adapted from http://code.google.com/p/gorilla/source/browse/color/hsl.go,
 func hueToRGB(p, q, t float64) float64 {
-        if t < 0 {
-                t += 1
-        }
-        if t > 1 {
-                t -= 1
-        }
-        if t < 1.0/6 {
-                return p + (q-p)*6*t
-        }
-        if t < 0.5 {
-                return q
-        }
-        if t < 2.0/3 {
-                return p + (q-p)*(2.0/3-t)*6
-        }
-        return p
+	if t < 0 {
+		t += 1
+	}
+	if t > 1 {
+		t -= 1
+	}
+	if t < 1.0/6 {
+		return p + (q-p)*6*t
+	}
+	if t < 0.5 {
+		return q
+	}
+	if t < 2.0/3 {
+		return p + (q-p)*(2.0/3-t)*6
+	}
+	return p
 }
 
 var allColors = regexp.MustCompile(`\^(\d|x[\dA-Fa-f]{3})`)
@@ -198,11 +198,11 @@ func (s *QStr) HTML() template.HTML {
 
 	// substitute matches of the form ^xrgb
 	// with r, g, and b being hexadecimal digits
-    // also cap the lightness to be in the given range
+	// also cap the lightness to be in the given range
 	matchedHexStrings := hexColors.FindAllStringSubmatch(r, -1)
 	for _, v := range matchedHexStrings {
-        c := HexToRGB(v[1], v[2], v[3])
-        c = c.Capped(0.5, 1.0)
+		c := HexToRGB(v[1], v[2], v[3])
+		c = c.Capped(0.5, 1.0)
 		r = strings.Replace(r, v[0], c.SpanStr(), 1)
 	}
 

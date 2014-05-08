@@ -1,26 +1,26 @@
 package main
 
 import (
-    "github.com/antzucaro/gostat/controllers"
-    "github.com/antzucaro/gostat/models"
-    "github.com/antzucaro/gostat/templates"
-    "github.com/go-martini/martini"
+	"github.com/antzucaro/gostat/controllers"
+	"github.com/antzucaro/gostat/models"
+	"github.com/antzucaro/gostat/templates"
+	"github.com/go-martini/martini"
 )
 
 func main() {
-  m := martini.Classic()
+	m := martini.Classic()
 
-  // establish database connection, prepare queries
-  models.Init()
+	// establish database connection, prepare queries
+	models.Init()
 
-  // establish http response cache
-  controllers.Init()
+	// establish http response cache
+	controllers.Init()
 
-  // templates
-  templates.Init()
+	// templates
+	templates.Init()
 
-  // routes
-  m.Get("/", controllers.Leaderboard)
+	// routes
+	m.Get("/", controllers.Leaderboard)
 
-  m.Run()
+	m.Run()
 }

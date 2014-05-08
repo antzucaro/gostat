@@ -1,31 +1,31 @@
 package templates
 
 import (
-    "html/template"
-    "log"
-    "net/http"
+	"html/template"
+	"log"
+	"net/http"
 )
 
 var templates = map[string]*template.Template{}
 
 func initTemplate(name string, filenames ...string) {
-    t, err := template.ParseFiles(filenames...)
-    if err != nil {
-        log.Fatal("Error retrieving or compiling the " + name + " template.")
-    }
+	t, err := template.ParseFiles(filenames...)
+	if err != nil {
+		log.Fatal("Error retrieving or compiling the " + name + " template.")
+	}
 
-    templates[name] = t
+	templates[name] = t
 }
 
 func Init() {
-  initTemplate("leaderboard", "templates/base.html")
+	initTemplate("leaderboard", "templates/base.html")
 }
 
 func Render(name string, w http.ResponseWriter, c interface{}) {
-    t, ok := templates[name]
-    if !ok {
-        log.Fatal("Invalid template: " + name)
-    }
+	t, ok := templates[name]
+	if !ok {
+		log.Fatal("Invalid template: " + name)
+	}
 
-    t.Execute(w, c)
+	t.Execute(w, c)
 }

@@ -1,25 +1,25 @@
 package models
 
 import (
-    "database/sql"
-    "github.com/antzucaro/gostat/config"
-    "github.com/antzucaro/gostat/qstr"
-    "log"
+	"database/sql"
+	"github.com/antzucaro/gostat/config"
+	"github.com/antzucaro/gostat/qstr"
+	"log"
 )
 
 // A PlayerScore represents the accumulated score of a player over
 // an unspecified time window.
 type PlayerScore struct {
-    N int
-    PlayerID int
-    Nick qstr.QStr
-    Score int
+	N        int
+	PlayerID int
+	Nick     qstr.QStr
+	Score    int
 }
 
 var playerScoreSQL = `select player_id, nick, sum(score)
 from player_game_stats
-where create_dt > now() at time zone 'utc' - interval '` + 
-config.Config.TopPlayersByScoreDays + ` days'
+where create_dt > now() at time zone 'utc' - interval '` +
+	config.Config.TopPlayersByScoreDays + ` days'
 and player_id >= 2
 and nick != 'Anonymous Player' 
 group by player_id, nick
@@ -34,27 +34,27 @@ var playerScoreStmt *sql.Stmt
 // returned can be be constrained to a specific window within the result set
 // via the "limit" and "offset" parameters.
 func GetTopPlayersByScore(limit int, offset int) []PlayerScore {
-    rows, err := playerScoreStmt.Query(limit, offset)
-    if err != nil {
-        log.Fatal("Error running query playerScoreStmt.")
-    }
+	rows, err := playerScoreStmt.Query(limit, offset)
+	if err != nil {
+		log.Fatal("Error running query playerScoreStmt.")
+	}
 
-    playerScores := make([]PlayerScore, 0, limit)
+	playerScores := make([]PlayerScore, 0, limit)
 
-    n := 1
-    var playerID int
-    var nick string
-    var score int
+	n := 1
+	var playerID int
+	var nick string
+	var score int
 
-    for rows.Next() {
-        rows.Scan(&playerID, &nick, &score)
+	for rows.Next() {
+		rows.Scan(&playerID, &nick, &score)
 
-        ps := PlayerScore{n, playerID, qstr.QStr(nick), score}
+		ps := PlayerScore{n, playerID, qstr.QStr(nick), score}
 
-        playerScores = append(playerScores, ps)
+		playerScores = append(playerScores, ps)
 
-        n += 1
-    }
+		n += 1
+	}
 
-    return playerScores
+	return playerScores
 }
